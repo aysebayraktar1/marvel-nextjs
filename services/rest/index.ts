@@ -16,3 +16,21 @@ export const getCharacterList = async (limit: number) => {
 
   return characters.data?.data?.results;
 };
+
+export const getCharacterById = async (id: number) => {
+  const characters = await api.get(`characters/${id}?hash=${hash}`);
+
+  return characters.data?.data?.results;
+};
+
+export const getComicsByCharId = async (
+  id: number,
+  limit: number,
+  orderBy: string
+) => {
+  const characters = await api.get(
+    `characters/${id}/comics?hash=${hash}&limit=${limit}&orderBy=${orderBy}`
+  );
+
+  return characters.data?.data?.results;
+};

@@ -25,3 +25,9 @@ interface ICharacterCard {
   };
   id: number;
 }
+
+interface IComicCard {
+  id: number;
+  title: string;
+  description: string;
+}

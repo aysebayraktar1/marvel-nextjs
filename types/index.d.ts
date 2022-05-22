@@ -1,5 +1,6 @@
 interface ICharacterList {
   characters: ICharacter[];
+  limit?: number;
 }
 
 interface ICharacter {
@@ -36,4 +37,9 @@ interface IComicCard {
 interface IDetailPage {
   detail: ICharacterCard[];
   comics: IComic[];
+}
+
+interface InfiniteProps {
+  isFetching: boolean;
+  setIsFetching: (isFetching: boolean) => void;
 }

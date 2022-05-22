@@ -15,7 +15,6 @@ import {
 import { GetServerSideProps } from "next";
 
 const DetailPage: FC<IDetailPage> = ({ detail, comics }) => {
-  console.log("detail", detail);
   return (
     <CharacterDetailStyled>
       {detail?.map(({ name, thumbnail: { path }, description, id }) => (

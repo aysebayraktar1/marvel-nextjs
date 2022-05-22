@@ -23,7 +23,7 @@ interface IComic {
 interface ICharacterCard {
   name: string;
   thumbnail: {
-    path: string;
+    path?: string;
   };
   id: number;
   description?: string | "";

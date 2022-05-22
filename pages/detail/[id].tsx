@@ -1,39 +1,27 @@
-import React, { useEffect, useState } from 'react';
-import NextImage from '../../components/Image';
-import ComicCard from '../../components/ComicCard';
+import React, { FC } from "react";
+import NextImage from "../../components/Image";
+import ComicCard from "../../components/ComicCard";
 import {
   CharacterDetailStyled,
   CharDescStyled,
   CharNameStyled,
   DetailWrapper,
-  ComicTitleStyled
-} from '../../styles/detail';
-import { getCharacterById, getComicsByCharId } from '../../services/rest';
+  ComicTitleStyled,
+} from "../../styles/detail";
+import {
+  getCharacterById,
+  getComicsByCharIdAndOrderDesc,
+} from "../../services/rest";
+import { GetServerSideProps } from "next";
 
-const DetailPage = ({ detail, id }) => {
-  const [comics, setComics] = useState(null);
-
-  useEffect(() => {
-    // fetch comics
-    const fetchData = async () => {
-      let res = [];
-      try {
-        res = await getComicsByCharId(id, 10, '-onsaleDate');
-      } catch (err) {
-        console.log(err);
-      }
-      setComics(res);
-    };
-
-    fetchData();
-  }, [id]);
-
+const DetailPage: FC<IDetailPage> = ({ detail, comics }) => {
+  console.log("detail", detail);
   return (
     <CharacterDetailStyled>
-      {detail?.map(({ name, thumbnail, description, id }) => (
+      {detail?.map(({ name, thumbnail: { path }, description, id }) => (
         <DetailWrapper key={id}>
           <NextImage
-            src={thumbnail.path + '/standard_fantastic.jpg'}
+            src={path + "/standard_fantastic.jpg"}
             priority={true}
             width={250}
             height={250}
@@ -53,15 +41,24 @@ const DetailPage = ({ detail, id }) => {
   );
 };
 
-DetailPage.getInitialProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async ({ query }) => {
   const { id } = query;
   let detail = [];
+  let comics = [];
+
+  // fetch comics
   try {
+    comics = await getComicsByCharIdAndOrderDesc(id, 10, "-onsaleDate");
     detail = await getCharacterById(id);
   } catch (err) {
     console.log(err);
   }
-  return { detail: detail, id };
+  return {
+    props: {
+      detail,
+      comics,
+    },
+  };
 };
 
 export default DetailPage;

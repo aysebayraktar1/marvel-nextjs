@@ -14,7 +14,8 @@ interface ICharacter {
 
 interface IComic {
   id: number;
-  name: string;
+  title: string;
+  name?: string;
   description: string;
 }
 
@@ -24,10 +25,15 @@ interface ICharacterCard {
     path: string;
   };
   id: number;
+  description?: string | "";
 }
 
 interface IComicCard {
   id: number;
   title: string;
   description: string;
+}
+interface IDetailPage {
+  detail: ICharacterCard[];
+  comics: IComic[];
 }

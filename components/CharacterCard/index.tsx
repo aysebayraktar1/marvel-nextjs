@@ -1,13 +1,17 @@
-import React, { FC } from 'react';
-import NextImage from '../Image';
-import Link from 'next/link';
+import React, { FC } from "react";
+import NextImage from "../Image";
+import Link from "next/link";
 
-const CharacterCard: FC<ICharacterCard> = ({ name, thumbnail, id }) => {
+const CharacterCard: FC<ICharacterCard> = ({
+  name,
+  thumbnail: { path },
+  id,
+}) => {
   return (
     <Link href={`/detail/${id}`}>
       <a>
         <NextImage
-          src={thumbnail.path + '/standard_fantastic.jpg'}
+          src={path + "/standard_fantastic.jpg"}
           priority={true}
           width={250}
           height={250}

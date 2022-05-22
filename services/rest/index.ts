@@ -17,14 +17,14 @@ export const getCharacterList = async (limit: number) => {
   return characters.data?.data?.results;
 };
 
-export const getCharacterById = async (id: number) => {
+export const getCharacterById = async (id: string | string[]) => {
   const characters = await api.get(`characters/${id}?hash=${hash}`);
 
   return characters.data?.data?.results;
 };
 
-export const getComicsByCharId = async (
-  id: number,
+export const getComicsByCharIdAndOrderDesc = async (
+  id: string | string[],
   limit: number,
   orderBy: string
 ) => {

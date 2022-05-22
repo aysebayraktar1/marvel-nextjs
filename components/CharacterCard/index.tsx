@@ -1,11 +1,11 @@
 import React, { FC } from "react";
 import NextImage from "../Image";
 import Link from "next/link";
-import { ImageWrapper, NameStyled } from "./styled";
+import { ImageWrapper, NameStyled, CharacterCardWrapper } from "./styled";
 
 const CharacterCard: FC<ICharacterCard> = ({ name, thumbnail, id }) => {
   return (
-    <div data-testid="CharacterCard__Component">
+    <CharacterCardWrapper data-testid="CharacterCard__Component">
       <Link href={`/detail/${id}`}>
         <ImageWrapper>
           <NextImage
@@ -20,7 +20,7 @@ const CharacterCard: FC<ICharacterCard> = ({ name, thumbnail, id }) => {
           <NameStyled>{name}</NameStyled>
         </ImageWrapper>
       </Link>
-    </div>
+    </CharacterCardWrapper>
   );
 };
 

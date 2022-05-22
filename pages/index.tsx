@@ -39,14 +39,13 @@ const CharacterList = ({ characters, limit }: ICharacterList) => {
   }
 
   useEffect(() => {
-    if (!filterTerm) {
-      return;
-    } else {
+    if (!!filterTerm) {
       const newCharList = characterList.filter((char) =>
         char.name.includes(filterTerm)
       );
-      console.log("newCharList", newCharList, filterTerm)
       setCharacterList(newCharList);
+    } else {
+      setCharacterList(characters);
     }
   }, [filterTerm]);
 
@@ -75,13 +74,14 @@ const CharacterList = ({ characters, limit }: ICharacterList) => {
             <CharacterCard name={name} thumbnail={thumbnail} id={id} />
           </CardWrapper>
         ))}
-        {isFetching || isPending && (
-          <LoaderStyled>
-            <CircleStyled />
-            <CircleStyled />
-            <CircleStyled />
-          </LoaderStyled>
-        )}
+        {isFetching ||
+          (isPending && (
+            <LoaderStyled>
+              <CircleStyled />
+              <CircleStyled />
+              <CircleStyled />
+            </LoaderStyled>
+          ))}
       </CharacterListStyled>
     </>
   );

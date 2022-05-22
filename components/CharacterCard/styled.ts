@@ -20,3 +20,7 @@ export const NameStyled = styled.div`
   text-overflow: ellipsis;
   display: inherit;
 `;
+
+export const CharacterCardWrapper = styled.div`
+  display: flex;
+`;

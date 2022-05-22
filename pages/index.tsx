@@ -1,35 +1,60 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 
 import { GetStaticProps } from "next";
 import Head from "next/head";
 import CharacterCard from "../components/CharacterCard";
 import { getCharacterList } from "../services/rest";
-import { CharacterListStyled, CardWrapper } from "../styles/homepage";
+import {
+  CharacterListStyled,
+  CardWrapper,
+  LoaderStyled,
+  CircleStyled,
+  SearchInputStyled,
+  SearchInputWrapper,
+} from "../styles/homepage";
 import useInfiniteScroll from "../hooks/useInfinite";
 
 const CharacterList = ({ characters, limit }: ICharacterList) => {
-  const [limitVal, setLimitVal] = useState(limit + 10);
   const [characterList, setCharacterList] = useState(characters);
   const [isFetching, setIsFetching] = useInfiniteScroll(getMoreCharacters);
+  const [offset, setOffset] = useState(limit);
+  const [isPending, startTransition] = useTransition();
+  const [filterTerm, setFilterTerm] = useState("");
 
   async function getMoreCharacters() {
     if (isFetching) {
       let characters;
       try {
-        characters = await getCharacterList(limitVal);
+        characters = await getCharacterList(10, offset);
       } catch (err) {
         console.log(err);
       }
-      const ids = new Set(characterList?.map((d) => d.id));
-      const allCharList = [
-        ...characterList,
-        ...characters?.filter((d) => !ids.has(d.id)),
-      ];
+
+      const allCharList = [...characterList, ...characters];
       setCharacterList(allCharList);
-      setLimitVal(limitVal + 10);
-      setIsFetching(limitVal < 100);
+      setOffset(offset + 10);
+      // control data total count
+      setIsFetching(offset > 1560);
     }
   }
+
+  useEffect(() => {
+    if (!filterTerm) {
+      return;
+    } else {
+      const newCharList = characterList.filter((char) =>
+        char.name.includes(filterTerm)
+      );
+      console.log("newCharList", newCharList, filterTerm)
+      setCharacterList(newCharList);
+    }
+  }, [filterTerm]);
+
+  const searchItems = (searchValue) => {
+    startTransition(() => {
+      setFilterTerm(searchValue);
+    });
+  };
 
   return (
     <>
@@ -37,14 +62,27 @@ const CharacterList = ({ characters, limit }: ICharacterList) => {
         <title>Marvel</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
+      <SearchInputWrapper>
+        <SearchInputStyled
+          type="text"
+          placeholder="Search..."
+          onChange={(e) => searchItems(e.target.value)}
+        />
+      </SearchInputWrapper>
       <CharacterListStyled>
         {characterList?.map(({ name, id, thumbnail }) => (
           <CardWrapper key={id}>
             <CharacterCard name={name} thumbnail={thumbnail} id={id} />
           </CardWrapper>
         ))}
+        {isFetching || isPending && (
+          <LoaderStyled>
+            <CircleStyled />
+            <CircleStyled />
+            <CircleStyled />
+          </LoaderStyled>
+        )}
       </CharacterListStyled>
-      {isFetching && <div>Loading more</div>}
     </>
   );
 };
@@ -53,7 +91,7 @@ export const getStaticProps: GetStaticProps = async () => {
   let characters = [];
   const limit = 30;
   try {
-    characters = await getCharacterList(limit);
+    characters = await getCharacterList(limit, 0);
   } catch (err) {
     console.log(err);
   }

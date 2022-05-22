@@ -1,6 +1,7 @@
 import React, { FC } from "react";
 import NextImage from "../Image";
 import Link from "next/link";
+import { ImageWrapper, NameStyled } from "./styled";
 
 const CharacterCard: FC<ICharacterCard> = ({
   name,
@@ -9,18 +10,18 @@ const CharacterCard: FC<ICharacterCard> = ({
 }) => {
   return (
     <Link href={`/detail/${id}`}>
-      <a>
+      <ImageWrapper>
         <NextImage
           src={path + "/standard_fantastic.jpg"}
           priority={true}
           width={250}
           height={250}
-          objectFit="contain"
+          objectFit="cover"
           quality={100}
           alt={name}
         />
-        <div>{name}</div>
-      </a>
+        <NameStyled>{name}</NameStyled>
+      </ImageWrapper>
     </Link>
   );
 };

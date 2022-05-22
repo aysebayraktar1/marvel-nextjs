@@ -1,41 +1,37 @@
 import React, { FC } from "react";
-import NextImage from "../../components/Image";
 import ComicCard from "../../components/ComicCard";
 import {
   CharacterDetailStyled,
   CharDescStyled,
-  CharNameStyled,
   DetailWrapper,
   ComicTitleStyled,
+  CardWrapper,
+  ComicListStyled
 } from "../../styles/detail";
 import {
   getCharacterById,
   getComicsByCharIdAndOrderDesc,
 } from "../../services/rest";
 import { GetServerSideProps } from "next";
+import CharacterCard from "../../components/CharacterCard";
 
 const DetailPage: FC<IDetailPage> = ({ detail, comics }) => {
   return (
     <CharacterDetailStyled>
-      {detail?.map(({ name, thumbnail: { path }, description, id }) => (
+      {detail?.map(({ name, thumbnail, description, id }) => (
         <DetailWrapper key={id}>
-          <NextImage
-            src={path + "/standard_fantastic.jpg"}
-            priority={true}
-            width={250}
-            height={250}
-            objectFit="contain"
-            quality={100}
-            alt={name}
-          />
-          <CharNameStyled>{name}</CharNameStyled>
+         <CardWrapper>
+            <CharacterCard name={name} thumbnail={thumbnail} id={id} />
+          </CardWrapper>
           <CharDescStyled>{description}</CharDescStyled>
         </DetailWrapper>
       ))}
-      <ComicTitleStyled>Comics</ComicTitleStyled>
+      {comics?.length && <ComicTitleStyled>Comics</ComicTitleStyled>}
+      <ComicListStyled>
       {comics?.map(({ id, title, description }) => (
         <ComicCard key={id} id={id} title={title} description={description} />
       ))}
+      </ComicListStyled>
     </CharacterDetailStyled>
   );
 };

@@ -11,8 +11,8 @@ const api = axios.create({
   params: { apikey: publicKey, ts: ts },
 });
 
-export const getCharacterList = async (limit: number) => {
-  const characters = await api.get(`characters?hash=${hash}&limit=${limit}`);
+export const getCharacterList = async (limit: number, offset: number) => {
+  const characters = await api.get(`characters?hash=${hash}&limit=${limit}&offset=${offset}`);
 
   return characters.data?.data?.results;
 };

@@ -2,11 +2,11 @@ import React, { FC } from "react";
 
 const ComicCard: FC<IComicCard> = ({ id, title, description }) => {
   return (
-    <div key={id} data-testid="ComicCard__Component">
+    <li key={id} data-testid="ComicCard__Component">
       {title}
       <pre></pre>
       <div dangerouslySetInnerHTML={{ __html: description }} />
-    </div>
+    </li>
   );
 };
 

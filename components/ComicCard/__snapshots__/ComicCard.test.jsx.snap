@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders comic card unchanged 1`] = `
+<div>
+  <li
+    data-testid="ComicCard__Component"
+  >
+    <pre />
+    <div />
+  </li>
+</div>
+`;

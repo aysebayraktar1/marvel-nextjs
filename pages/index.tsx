@@ -18,13 +18,16 @@ const CharacterList = ({ characters, limit }: ICharacterList) => {
   const [characterList, setCharacterList] = useState(characters);
   const [isFetching, setIsFetching] = useInfiniteScroll(getMoreCharacters);
   const [offset, setOffset] = useState(limit);
-  const [isPending, startTransition] = useTransition();
-  const [filterTerm, setFilterTerm] = useState("");
+  const [loadMore, setIsLoadMore] = useState(false);
+
+  // const [isPending, startTransition] = useTransition();
+  // const [filterTerm, setFilterTerm] = useState("");
 
   async function getMoreCharacters() {
     if (isFetching) {
       let characters;
       try {
+        setIsLoadMore(true)
         characters = await getCharacterList(10, offset);
       } catch (err) {
         console.log(err);
@@ -35,25 +38,26 @@ const CharacterList = ({ characters, limit }: ICharacterList) => {
       setOffset(offset + 10);
       // control data total count
       setIsFetching(offset > 1560);
+      setIsLoadMore(false)
     }
   }
 
-  useEffect(() => {
-    if (!!filterTerm) {
-      const newCharList = characterList.filter((char) =>
-        char.name.includes(filterTerm)
-      );
-      setCharacterList(newCharList);
-    } else {
-      setCharacterList(characters);
-    }
-  }, [filterTerm]);
+  // useEffect(() => {
+  //   if (!!filterTerm) {
+  //     const newCharList = characterList.filter((char) =>
+  //       char.name.includes(filterTerm)
+  //     );
+  //     setCharacterList(newCharList);
+  //   } else {
+  //     setCharacterList(characters);
+  //   }
+  // }, [filterTerm]);
 
-  const searchItems = (searchValue) => {
-    startTransition(() => {
-      setFilterTerm(searchValue);
-    });
-  };
+  // const searchItems = (searchValue) => {
+  //   startTransition(() => {
+  //     setFilterTerm(searchValue);
+  //   });
+  // };
 
   return (
     <>
@@ -61,27 +65,26 @@ const CharacterList = ({ characters, limit }: ICharacterList) => {
         <title>Marvel</title>
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <SearchInputWrapper>
+      {/* <SearchInputWrapper>
         <SearchInputStyled
           type="text"
           placeholder="Search..."
           onChange={(e) => searchItems(e.target.value)}
         />
-      </SearchInputWrapper>
+      </SearchInputWrapper> */}
       <CharacterListStyled>
         {characterList?.map(({ name, id, thumbnail }) => (
           <CardWrapper key={id}>
             <CharacterCard name={name} thumbnail={thumbnail} id={id} />
           </CardWrapper>
         ))}
-        {isFetching ||
-          (isPending && (
+        {loadMore &&
             <LoaderStyled>
               <CircleStyled />
               <CircleStyled />
               <CircleStyled />
             </LoaderStyled>
-          ))}
+          }
       </CharacterListStyled>
     </>
   );

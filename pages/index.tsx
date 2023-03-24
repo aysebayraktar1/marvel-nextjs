@@ -1,9 +1,9 @@
-import React, { useEffect, useState, useTransition } from "react";
+import React, { useEffect, useState, useTransition } from 'react';
 
-import { GetStaticProps } from "next";
-import Head from "next/head";
-import CharacterCard from "../components/CharacterCard";
-import { getCharacterList } from "../services/rest";
+import { GetStaticProps } from 'next';
+import Head from 'next/head';
+import CharacterCard from '../components/CharacterCard';
+import { getCharacterList } from '../services/rest';
 import {
   CharacterListStyled,
   CardWrapper,
@@ -11,8 +11,8 @@ import {
   CircleStyled,
   SearchInputStyled,
   SearchInputWrapper,
-} from "../styles/homepage";
-import useInfiniteScroll from "../hooks/useInfinite";
+} from '../styles/homepage';
+import useInfiniteScroll from '../hooks/useInfinite';
 
 const CharacterList = ({ characters, limit }: ICharacterList) => {
   const [characterList, setCharacterList] = useState(characters);
@@ -27,7 +27,7 @@ const CharacterList = ({ characters, limit }: ICharacterList) => {
     if (isFetching) {
       let characters;
       try {
-        setIsLoadMore(true)
+        setIsLoadMore(true);
         characters = await getCharacterList(10, offset);
       } catch (err) {
         console.log(err);
@@ -38,32 +38,15 @@ const CharacterList = ({ characters, limit }: ICharacterList) => {
       setOffset(offset + 10);
       // control data total count
       setIsFetching(offset > 1560);
-      setIsLoadMore(false)
+      setIsLoadMore(false);
     }
   }
-
-  // useEffect(() => {
-  //   if (!!filterTerm) {
-  //     const newCharList = characterList.filter((char) =>
-  //       char.name.includes(filterTerm)
-  //     );
-  //     setCharacterList(newCharList);
-  //   } else {
-  //     setCharacterList(characters);
-  //   }
-  // }, [filterTerm]);
-
-  // const searchItems = (searchValue) => {
-  //   startTransition(() => {
-  //     setFilterTerm(searchValue);
-  //   });
-  // };
 
   return (
     <>
       <Head>
         <title>Marvel</title>
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+        <meta name='viewport' content='initial-scale=1.0, width=device-width' />
       </Head>
       {/* <SearchInputWrapper>
         <SearchInputStyled
@@ -78,13 +61,13 @@ const CharacterList = ({ characters, limit }: ICharacterList) => {
             <CharacterCard name={name} thumbnail={thumbnail} id={id} />
           </CardWrapper>
         ))}
-        {loadMore &&
-            <LoaderStyled>
-              <CircleStyled />
-              <CircleStyled />
-              <CircleStyled />
-            </LoaderStyled>
-          }
+        {loadMore && (
+          <LoaderStyled>
+            <CircleStyled />
+            <CircleStyled />
+            <CircleStyled />
+          </LoaderStyled>
+        )}
       </CharacterListStyled>
     </>
   );
